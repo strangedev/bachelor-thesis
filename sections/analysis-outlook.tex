@@ -1,0 +1,14 @@
+\section{Analysis \& Outlook}
+    \subsection{Known Issues \& Caveats}
+        Joined table inheritance is inferior to single table inheritance
+        for this application, even if it looks ugly. Why: performance,
+        no foreign key constraints that mess with you
+
+        The template feature is too sophisticated, import and export would have sufficed
+        this took time away
+
+        No tests exist for the backend, major burden on maintainability
+
+         the email adress of the data client who conducts the survey
+    is added as a prefix to all xAPI activity IDs before sending.
+    -> Drawback: not normalized, potential fix: use Instructor <-

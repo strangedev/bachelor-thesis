@@ -1,0 +1,90 @@
+\subsection{List of xAPI Statements}
+
+\begin{figure}[H]
+    \begin{lstlisting}[language=JSON]
+{
+    "actor": {
+        "account": {
+            "homePage": "http://lmsng.school.edu",
+            "name": "292832126.333"
+        },
+        "name": "292832126.333",
+        "objectType": "Agent"
+    },
+    "context": {
+        "contextActivities": {
+            "grouping": [
+                {
+                    "definition": {
+                        "description": {
+                            "en-US": "This is a survey hosted at st3k101."
+                        },
+                        "name": {
+                            "agq": "Questionnaire name"
+                        },
+                        "type": "http://id.tincanapi.com/activitytype/survey"
+                    },
+                    "id": "<bla@blubl.net>:Questionnaire-n-f7f705a0c1",
+                    "objectType": "Activity"
+                }
+            ],
+            "parent": [
+                {
+                    "definition": {
+                        "description": {
+                            "en-US": "This is a particular scale of a survey, it usually contains multiple questions."
+                        },
+                        "name": {
+                            "de": "4.2 \u00dcberwachung"
+                        },
+                        "type": "http://fantasy.land/dimension"
+                    },
+                    "id": "<bla@blubl.net>:lernstrategien_wild_schiefele--4_2_&#252;berwachung",
+                    "objectType": "Activity"
+                }
+            ]
+        },
+        "language": "agq",
+        "platform": "st3k101 via lmsng.school.edu"
+    },
+    "id": "fcc317f7-d3ce-4597-ad88-245792ecb9c9",
+    "object": {
+        "definition": {
+            "description": {
+                "en-US": "This is a question that is part of a survey at st3k101."
+    \end{lstlisting}
+    \caption{Anatomy of an xAPI statement}
+    \label{fig:anatomy-xapi-statement}
+\end{figure}
+
+\begin{figure}
+    \begin{lstlisting}
+            },
+            "name": {
+                "de": "Ich bearbeite zus\u00e4tzliche Aufgaben, um festzustellen, ob ich den Stoff wirklich verstanden habe."
+            },
+            "type": "http://adlnet.gov/expapi/activities/question"
+        },
+        "id": "<bla@blubl.net>:lernstrategien_wild_schiefele--4_2_&#252;berwachung--7",
+        "objectType": "Activity"
+    },
+    "result": [
+        {
+            "score": {
+                "max": 5,
+                "min": 1,
+                "raw": 2,
+                "scaled": 1
+            }
+        }
+    ],
+    "timestamp": "2018-10-12T09:41:15.151759",
+    "verb": {
+        "display": {
+            "en-US": "Indicates the DataSubject answered something."
+        },
+        "id": "http://adlnet.gov/expapi/verbs/answered"
+    }
+}                 
+    \end{lstlisting}
+\end{figure}

@@ -1,7 +1,77 @@
 \subsection{List of xAPI Statements}
 
-\begin{figure}[H]
-    \begin{lstlisting}[language=JSON]
+\subsubsection*{Data Subject Launched the Embedded Survey}
+\begin{lstlisting}[language=JSON]
+{
+    "actor": {
+        "account": {
+            "homePage": "http://localhost",
+            "name": "user"
+        },
+        "name": "user",
+        "objectType": "Agent"
+    },
+    "context": {
+        "extensions": {
+            "http://activitystrea.ms/schema/1.0/place": {
+                "definition": {
+                    "description": {
+                        "en-US": "Represents a physical location."
+                    },
+                    "name": {
+                        "en-US": "Place"
+                    },
+                    "type": "http://activitystrea.ms/schema/1.0/place"
+                },
+                "geojson": {
+                    "features": [
+                        {
+                            "geometry": {
+                                "coordinates": [
+                                    50.1167,
+                                    8.6833
+                                ],
+                                "type": "Point"
+                            },
+                            "type": "Feature"
+                        }
+                    ],
+                    "type": "FeatureCollection"
+                },
+                "id": "http://vocab.org/placetime/geopoint/wgs84/X50.1167Y8.6833.html",
+                "objectType": "Place"
+            }
+        },
+        "language": "en",
+        "platform": "st3k101 via localhost"
+    },
+    "id": "96433bdb-9766-40de-8a35-dc0743b3bbd6",
+    "object": {
+        "definition": {
+            "description": {
+                "en-US": "This is a survey hosted at st3k101."
+            },
+            "name": {
+                "en": "Eine Umfrage"
+            },
+            "type": "http://id.tincanapi.com/activitytype/survey"
+        },
+        "id": "<bla@blubl.net>:Eine-Umfrage-3074f53ee8",
+        "objectType": "Activity"
+    },
+    "timestamp": "2018-09-28T10:38:13.233259",
+    "verb": {
+        "display": {
+            "en-US": "Indicates someone accessed a resource at st3k101."
+        },
+        "id": "https://w3id.org/xapi/dod-isd/verbs/accessed"
+    }
+}
+\end{lstlisting}
+
+
+\subsubsection*{Data Subject Answers a Question}
+\begin{lstlisting}[language=JSON]
 {
     "actor": {
         "account": {
@@ -52,13 +122,6 @@
         "definition": {
             "description": {
                 "en-US": "This is a question that is part of a survey at st3k101."
-    \end{lstlisting}
-    \caption{Anatomy of an xAPI statement}
-    \label{fig:anatomy-xapi-statement}
-\end{figure}
-
-\begin{figure}
-    \begin{lstlisting}
             },
             "name": {
                 "de": "Ich bearbeite zus\u00e4tzliche Aufgaben, um festzustellen, ob ich den Stoff wirklich verstanden habe."
@@ -86,5 +149,240 @@
         "id": "http://adlnet.gov/expapi/verbs/answered"
     }
 }                 
-    \end{lstlisting}
-\end{figure}
+\end{lstlisting}
+
+\subsubsection*{Data Subject Answered a Known Dimension}
+\begin{lstlisting}[language=JSON]
+{
+    "actor": {
+        "account": {
+            "homePage": "http://localhost",
+            "name": "user"
+        },
+        "name": "user",
+        "objectType": "Agent"
+    },
+    "context": {
+        "contextActivities": {
+            "parent": [
+                {
+                    "definition": {
+                        "description": {
+                            "en-US": "This is a survey hosted at st3k101."
+                        },
+                        "name": {
+                            "en": "Test"
+                        },
+                        "type": "http://id.tincanapi.com/activitytype/survey"
+                    },
+                    "id": "<bla@blubl.net>:Test-fc9bca7314",
+                    "objectType": "Activity"
+                }
+            ]
+        },
+        "extensions": {
+            "http://activitystrea.ms/schema/1.0/place": {
+                "definition": {
+                    "description": {
+                        "en-US": "Represents a physical location."
+                    },
+                    "name": {
+                        "en-US": "Place"
+                    },
+                    "type": "http://activitystrea.ms/schema/1.0/place"
+                },
+                "geojson": {
+                    "features": [
+                        {
+                            "geometry": {
+                                "coordinates": [
+                                    50.1167,
+                                    8.6833
+                                ],
+                                "type": "Point"
+                            },
+                            "type": "Feature"
+                        }
+                    ],
+                    "type": "FeatureCollection"
+                },
+                "id": "http://vocab.org/placetime/geopoint/wgs84/X50.1167Y8.6833.html",
+                "objectType": "Place"
+            }
+        },
+        "language": "en",
+        "platform": "st3k101 via localhost"
+    },
+    "id": "92ae6926-1a94-45d1-8bd4-4e15b61f9005",
+    "object": {
+        "definition": {
+            "description": {
+                "en-US": "This is a particular scale of a survey, it usually contains multiple questions."
+            },
+            "name": {
+                "de": "5. Anstrengung"
+            },
+            "type": "http://fantasy.land/dimension"
+        },
+        "id": "<bla@blubl.net>:lernstrategien_wild_schiefele--5_anstrengung",
+        "objectType": "Activity"
+    },
+    "result": [
+        {
+            "score": {
+                "max": 5,
+                "min": 0,
+                "raw": 3.4,
+                "scaled": 1
+            }
+        }
+    ],
+    "timestamp": "2018-09-27T14:45:43.997006",
+    "verb": {
+        "display": {
+            "en-US": "Indicates the DataSubject answered something."
+        },
+        "id": "http://adlnet.gov/expapi/verbs/answered"
+    }
+}
+\end{lstlisting}
+
+
+\subsubsection*{Data Client Logged in Into the Backend}
+\begin{lstlisting}[language=JSON]
+{
+    "actor": {
+        "mbox": "mailto:bla@blubl.net",
+        "name": "bla@blubl.net",
+        "objectType": "Agent"
+    },
+    "context": {
+        "extensions": {
+            "http://activitystrea.ms/schema/1.0/place": {
+                "definition": {
+                    "description": {
+                        "en-US": "Represents a physical location."
+                    },
+                    "name": {
+                        "en-US": "Place"
+                    },
+                    "type": "http://activitystrea.ms/schema/1.0/place"
+                },
+                "geojson": {
+                    "features": [
+                        {
+                            "geometry": {
+                                "coordinates": [
+                                    50.1167,
+                                    8.6833
+                                ],
+                                "type": "Point"
+                            },
+                            "type": "Feature"
+                        }
+                    ],
+                    "type": "FeatureCollection"
+                },
+                "id": "http://vocab.org/placetime/geopoint/wgs84/X50.1167Y8.6833.html",
+                "objectType": "Place"
+            }
+        },
+        "language": "en",
+        "platform": "st3k101"
+    },
+    "id": "3dd10d0e-ef19-4c03-afe1-32e4a8c19f31",
+    "object": {
+        "definition": {
+            "description": {
+                "en-US": "This is the log in page of the st3k101 survey tool."
+            },
+            "name": {
+                "en-US": "St3k101 login view"
+            },
+            "type": "http://activitystrea.ms/schema/1.0/page"
+        },
+        "id": "http://localhost/#/private",
+        "objectType": "Activity"
+    },
+    "timestamp": "2018-09-28T10:41:42.106959",
+    "verb": {
+        "display": {
+            "en-US": "Indicates someone logged in at st3k101."
+        },
+        "id": "https://brindlewaye.com/xAPITerms/verbs/loggedin"
+    }
+}
+\end{lstlisting}
+
+
+
+\subsubsection*{Data Client Updated the Activity ID of a Survey Item}
+\begin{lstlisting}[language=JSON]
+{
+    "actor": {
+        "mbox": "mailto:bla@blubl.net",
+        "name": "bla@blubl.net",
+        "objectType": "Agent"
+    },
+    "context": {
+        "extensions": {
+            "http://activitystrea.ms/schema/1.0/place": {
+                "definition": {
+                    "description": {
+                        "en-US": "Represents a physical location."
+                    },
+                    "name": {
+                        "en-US": "Place"
+                    },
+                    "type": "http://activitystrea.ms/schema/1.0/place"
+                },
+                "geojson": {
+                    "features": [
+                        {
+                            "geometry": {
+                                "coordinates": [
+                                    50.1167,
+                                    8.6833
+                                ],
+                                "type": "Point"
+                            },
+                            "type": "Feature"
+                        }
+                    ],
+                    "type": "FeatureCollection"
+                },
+                "id": "http://vocab.org/placetime/geopoint/wgs84/X50.1167Y8.6833.html",
+                "objectType": "Place"
+            }
+        },
+        "language": "de",
+        "platform": "st3k101"
+    },
+    "id": "18fe6ce1-5917-4039-a9f7-0aff3e04aa77",
+    "object": {
+        "definition": {
+            "description": {
+                "en-US": "This is a particular scale of a survey, it usually contains multiple questions."
+            },
+            "name": {
+                "de": "1. Organisationsstrategien"
+            },
+            "type": "http://fantasy.land/dimension"
+        },
+        "id": "<bla@blubl.net>:lernstrategien_wild_schiefele--1_organisationsstrategien",
+        "objectType": "Activity"
+    },
+    "result": [
+        {
+            "response": "<bla@blubl.net>:lernstrategien_wild_schiefele--1_organisationsstrategien--new-id"
+        }
+    ],
+    "timestamp": "2018-09-28T10:59:16.169476",
+    "verb": {
+        "display": {
+            "en-US": "Indicates the DataClient updated the reference id."
+        },
+        "id": "http://activitystrea.ms/schema/1.0/update"
+    }
+}
+\end{lstlisting}

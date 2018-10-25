@@ -4,148 +4,36 @@
 
 \documentclass[a4paper,11pt]{article}
 
-    %% Packages from ASI-PR
-    \usepackage[T1]{fontenc}
-    \usepackage[utf8]{inputenc}
-    \usepackage{lmodern}
-    %\usepackage{ngerman}
-    \usepackage{fancyhdr}
-    \usepackage{geometry}
-    \usepackage{float}
-    \usepackage{cite}
-    \usepackage[numbers,round]{natbib}
-    \usepackage{tikz}
-    \usepackage{circuitikz}
-
-    %% New Packages for AP2
-    \usepackage{multicol}
-    \usepackage{csvsimple}
-    \usepackage{lscape}
-    \usepackage{xfrac}
-    \usepackage{amsmath}
-    \usepackage{mathtools}
-    %%\usepackage{subfig}
-    \usepackage{graphicx}
-    \usepackage{gensymb}
-    \usepackage{hyperref}
-    \usepackage{wrapfig}
-
-    %% New packages for BThesis
-    \usepackage{diagbox}
-    \usepackage{listings}
-    \usepackage{subcaption}
-    \usepackage{tabularx}
-
-
-    %%%% Listings
-    \usepackage{bera}% optional: just to have a nice mono-spaced font
-    \usepackage{xcolor} 
-
-    \colorlet{punct}{red!60!black}
-    \definecolor{background}{HTML}{EEEEEE}
-    \definecolor{delim}{RGB}{20,105,176}
-    \colorlet{numb}{magenta!60!black}
-
-    % Python style for highlighting
-\newcommand\pythonstyle{\lstset{
-    language=Python,
-    basicstyle=\ttm,
-    otherkeywords={self},             % Add keywords here
-    keywordstyle=\ttb\color{deepblue},
-    emph={MyClass,__init__},          % Custom highlighting
-    emphstyle=\ttb\color{deepred},    % Custom highlighting style
-    stringstyle=\color{deepgreen},
-    frame=tb,                         % Any extra options here
-    showstringspaces=false            % 
-    }}
-
-    \lstdefinelanguage{json}{
-        basicstyle=\normalfont\ttfamily,
-        numbers=left,
-        numberstyle=\scriptsize,
-        stepnumber=1,
-        numbersep=8pt,
-        showstringspaces=false,
-        breaklines=true,
-        frame=lines,
-        backgroundcolor=\color{background},
-        literate=
-        *{:}{{{\color{punct}{:}}}}{1}
-        {,}{{{\color{punct}{,}}}}{1}
-        {\{}{{{\color{delim}{\{}}}}{1}
-        {\}}{{{\color{delim}{\}}}}}{1}
-        {[}{{{\color{delim}{[}}}}{1}
-        {]}{{{\color{delim}{]}}}}{1},
-    }
-    %%%%
+\input{preamble.tex}
     
-    %% Page Setup
-    \geometry{verbose,a4paper,tmargin=25mm,bmargin=25mm,lmargin=15mm,rmargin=15mm}
-    \pagestyle{fancy}
-    \fancyhf{}
+\begin{document}
 
-    %% Images are loaded from ./img
-    \graphicspath{{img/}}
+    \tableofcontents
 
-    %% Header ...
-    \lhead{} %% (!!!) Change this when re-using!
-    \rhead{}
-    %% ... and Footer
-    \rfoot{Page \thepage}
-
-    \title{A Generic Survey Tool with xAPI Support \\ \\ }
-    \date{\today}
-    \author{Noah Hummel}
+    \pagebreak
     
-    %%%% Some helpful stuffs %%%%
+    \section{Foreword}
+        I would like to thank Hannes Leutloff, who has spent countless hours
+        on this project voluntarily and without whose tireless work on
+        the user interface, the build infrastructure, mentoring and code reviews, 
+        this project would not have been possible.
 
-    %% \begin{onepage} -> Fit contents on one page
-    \newcommand{\addstretch}[1]{\addtolength{#1}{\fill}}
-    \newenvironment{onepage}
-      {\newpage\flushbottom
-       \addstretch{\baselineskip}
-       \addstretch{\abovedisplayskip}
-       \addstretch{\abovedisplayshortskip}
-       \addstretch{\belowdisplayskip}
-       \addstretch{\belowdisplayshortskip}
-       \setlength{\parskip}{0pt}}
-      {\newpage}
+    \input{sections/introduction.tex}
+    \input{sections/requirements-analysis.tex}
+    \input{sections/concept.tex}
+    \input{sections/implementation.tex}
+    \input{sections/analysis.tex}
+    \input{sections/outlook.tex}
 
-    %% $\abs{X}$ -> |X| 
-    \DeclarePairedDelimiter\abs{\lvert}{\rvert}
+    \pagebreak
 
-    \newcommand{\profhd}{Prof. H. Drachsler }
+    \input{sections/appendix.tex}
 
-    \def\inline{\lstinline[basicstyle=\ttfamily,keywordstyle={}]}
-
-    \newcommand{\zcomp}{\underline{Z}}
-    \newcommand{\cmp}[1]{\underline{#1}}
+    \pagebreak
     
-    \begin{document}
-
-        \tableofcontents
-        \pagebreak
-    
-        \section{Foreword}
-            I would like to thank Hannes Leutloff, who has spent countless hours
-            on this project voluntarily and without whose tireless work on
-            the user interface, the build infrastructure, mentoring and code reviews, 
-            this project would not have been possible.
-
-        \input{sections/introduction.tex}
-        \input{sections/requirements-analysis.tex}
-        \input{sections/concept.tex}
-        \input{sections/implementation.tex}
-        \input{sections/analysis-outlook.tex}
-
-        \pagebreak
-
-        \input{sections/appendix.tex}
-
-        \pagebreak
-        \listoffigures
-        \listoftables
-        \bibliographystyle{alphadin}
-        \bibliography{ba.bib}
+    \listoffigures
+    \listoftables
+    \bibliographystyle{alphadin}
+    \bibliography{ba.bib}
     
     \end{document}

@@ -1,4 +1,5 @@
 \section{Implementation}
+\label{section:implementation:architecture}
 \subsection{Architecture}
     \begin{figure}[H]
         \centering
@@ -114,6 +115,7 @@
         \end{figure}
 
     \subsubsection{Inheritance Mapping via SQLAlchemy}
+    \label{section:implementation:inheritance-mapping}
         The AQLAlchemy library provides three distrinct mechanisms
         for mapping class hierarchies to relational database schemas,
         \textit{joined table inheritance}, \textit{single table inheritance}
@@ -150,6 +152,7 @@
         inheritance approach was used.
 
     \subsubsection{Template Management - The Template Triad}
+    \label{section:implementation:template-triad}
         \begin{figure}
             \centering
             \includegraphics[width=\textwidth]{schema-shadows}

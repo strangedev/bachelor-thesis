@@ -1,0 +1,105 @@
+\section{Outlook}
+	\subsection{Beta-Testing and Productive Use}
+		The survey tool will be used by participants of the Educational Technologies
+		Seminar held by Prof. H. Drachsler in winter 2018/19 for the first time.
+		In the seminar, students may choose to participate in a test-run
+		of the TLA infrastructure. In this test-run, data is gathered
+		from different sources, including the survey tool, to test
+		the capabilities of the TLA infrastructure and to discover
+		potential issues with the system. Participants will
+		take a survey accessing motivation and self-regulation
+		with reagrds to their learning behaviour. This data will
+		then be combined with activity data collected from Moodle,
+		regularly self-reported data on goal setting and time management
+		and physical attendence times.
+
+	\subsection{Future Features}
+		There are many additional features which could be added to
+		the existing codebase, after the known issues have been resolved.
+		This section describes some of these features and gives a
+		brief outline of how the feature could be integrated.
+
+		\subsubsection{Configurable Authentication Mechanisms for xAPI Consumers}
+			Some xAPI consumers only accept xAPI statements from known
+			sources and thus require authentication before statements
+			can be transmitted. The xapi-publisher service already supports
+			this and bundles statements by destination and auth mechanism, 
+			so that sessions may be re-used. This is not
+			described in this thesis, as this was added as part of a hotfix
+			within the last days of this thesis. The user interface
+			and backend service do not yet support configuration
+			by the user for this feature. In the future, the tool
+			could provide a set of common authentication mechanisms
+			for the data client to choose from. Depending on the
+			chosen mechanism, different configuration forms
+			would be displayed in the user interface to supply
+			credentials for the mechanism. 
+
+		\subsubsection{Additional Response Types}
+			In addition to questions which can be answered on a numerical
+			scale, other kinds of response types could be added to the survey
+			tool. This is particularly interesting for use cases outside
+			psychometry, for example when performing course evaluations.
+			Examples for additional response types are free text,
+			boolean (yes or no), date \& time and date- \& time-ranges.
+			Integrating these kinds of questions would mainly involve
+			subclassing the \inline{Question} class and designing
+			new user interface components. The overall survey logic
+			should still work with these new types. xAPI also already
+			supports these kinds of answer values.
+
+		\subsubsection{Additional Formatting Options for Data Clients}
+			At the moment, questions present a question text, as
+			well as labels for the upper and lower bounds of the response
+			range to the data subject. The question text does not
+			support formatting. This format is not suited to
+			longer paragraphs of text, for example when context has
+			to be provided for the question. In the future, questions
+			could support formatting using a markup language
+			like markdown or textile. The benefit of using a markup
+			language like this is, that no changes to the way
+			question texts are stored has to be made, as the markup
+			can be stored as plain text. Also, good library support
+			exists for converting these markup languages to HTML
+			in a safe manner. In the user interface, the markup
+			could either be entered by hand, if the markup language
+			is not too complicated, or an already existing
+			JavaScript markdown editor like SimpleMDE could be integrated.
+			Depending on the markup, this would also allow for images
+			and videos to be embedded into the survey, which
+			could greatly expand the set of surveys that can
+			be realised with the survey tool.
+
+		\subsubsection{A/B Questionnaires}
+			Some surveys study the effect of survey taking itself
+			on it's subjects. For this reason, different versions
+			of the same questionnaire might be presented to
+			data subjects. One such example would be a survey,
+			where one version uses an even number of response
+			values and the other uses an odd number. Currently,
+			the entire questionnaire would have to be duplicated in
+			order to achieve this. To solve this, a special
+			copy of a questionnaire could be created, which is
+			also optionally modifiable. Non-modified parts
+			of the questionnaire would then just reflect the
+			state of the original questionnaire, whereas modified
+			parts would override the original questionnaire's content.
+			Participants could then be assigned one of these
+			questionnaires randomly when accessing the survey.
+
+		\subsubsection{Version Control for Templates}
+			Instead of propagating changes to templates immediately
+			to all copies of it, data clients owning a copy
+			could be notified of the change and then choose to
+			move to the new version or keep using the old one.
+			This feature would involve keeping track of
+			content revisions for every survey item.
+			Instead of overwriting content when making changes
+			to a survey item, the changes would instead be
+			applied to a copy of the item, the new revision.
+			Copies of templates would then also contain information
+			about the revision they're shadowing. 
+			To up- or downgrade a survey item to another revision
+			would then just involve changing the copy's
+			\inline{reference_to} relationship to point to the newer
+			or older revision.

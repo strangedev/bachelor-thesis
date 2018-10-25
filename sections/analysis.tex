@@ -1,14 +1,175 @@
-\section{Analysis}
-    \subsection{Known Issues \& Caveats}
-        Joined table inheritance is inferior to single table inheritance
-        for this application, even if it looks ugly. Why: performance,
-        no foreign key constraints that mess with you
+\section{Analysis \& Discussion}
+	Overall, the requirements defined in section \ref{sections:requirements-analysis} were met.
+	As mentioned in section \ref{sections:introduction:scope}, a user interface for the
+	application was developed by Hannes Leutloff. Workflows using this user interface are
+	illustrated in section \ref{section:appendix:manual} to show how the requirements
+	translate into concrete usage of the tool.
 
-        The template feature is too sophisticated, import and export would have sufficed
-        this took time away
+    \subsection{Known Issues}
+    	In this section, known issues leading to improper or unexpected
+    	behaviour of the survey tool are discussed.
 
-        No tests exist for the backend, major burden on maintainability
+    	\subsubsection{Lack of Automated Tests}
+    		No automated tests were written for this project. This proved
+    		to be a major burden on development speed as the project
+    		matured. When refactoring old code or adding new features,
+    		tests help to identify potential problems early on.
+    		Without tests, bugs may be introduced into the codebase
+    		without the maintainers noticing and may ultimately
+    		affect the user in a negative way. Tests also
+    		help to indentify conceptual inconsistencies
+    		with new features more quickly. The codebase of the
+    		backend is still relatively small, containing
+    		approximately 5000 lines of Python. Test coverage for
+    		the backend can still be achieved, but should be prioritized
+    		over adding new features.
 
-         the email adress of the data client who conducts the survey
-    is added as a prefix to all xAPI activity IDs before sending.
-    -> Drawback: not normalized, potential fix: use Instructor <-
+    	\subsubsection{Internationalisation of the User Interface}
+    		While all user contributed content may be internationalised,
+    		the user interface language itself is not yet dynamic.
+    		Navigation and menus are all in english at the moment.
+    		For the data client user interface, this is not as
+    		problematic as for the data subject user interface, as 
+    		currently, all data clients are associates of Prof. H. Drachsler.
+    		For the data subject user interface however, this is confusing,
+    		as tranlated survey content is intermixed with english
+    		navigation elements.
+
+    	\subsubsection{Edge Cases of the Template Management}
+    		\begin{wrapfigure}{o}{0.5\textwidth}
+    			\centering
+    			\includegraphics[width=0.49\textwidth]{template-edge-case}
+    			\caption{Using a shadow instance inside the source concrete breaks the delete action}
+    			\label{fig:shadow-breaks-delete}
+    		\end{wrapfigure}
+
+    		When a shadow instance (Shadow \#1 of B) is created as a child of a concrete instance (Concrete A), which also contains the referenced
+    		concrete instance (Concrete B) for the newly created shadow (Shadow \#1 of B), the following case may occur: When a shadow (Shadow of A) is created
+    		of the parent instance, the relationship structure is also duplicated. The parent's shadow will
+    		then end up with two child shadow instances (Shadow \#2 of B, Shadow \#3 of B), pointing to the same concrete child of the parent.
+    		When trying to delete the original shadow instance (Shadow \#1 of B), the delete action is propagated to all
+    		shadows (Shadow of A) of it's parent as well. Since these shadows now contain two copies of the
+    		item to delete, there is no way of distinguishing which item to delete and the delete fails.
+    		This edge case is depicted in figure \ref{fig:shadow-breaks-delete}.
+    		Since there's no obvious use case for including the same survey item twice in a given survey,
+    		this case is unlikely to occur during day-to-day usage of the survey tool.
+
+    	\subsubsection{xAPI Statement Design}
+    		A questionnaire is identified by it's owner and it's xAPI activity ID in xAPI statements.
+    		When creating a questionnaire from template, the shadow's xAPI activity ID will shadow
+    		the template's xAPI activity ID for reasons described in section \ref{section:concept:xapi-statement-design}.
+    		This means, that if a data client creates a shadow copy of their own
+    		questionnaire, it's xAPI activity ID will not be distinguishable from
+    		the template's ID. The same case occurs, when a template is used multiple times
+    		by a data client. A potential fix for this issue would be
+    		separating the xAPI activity ID from the user-configurable ID and
+    		then generating the xAPI acitivity ID by concatenating information
+    		the owner, the user-configurable ID and a the unique database ID
+    		of the questionnaire. The resulting xAPI activity ID should be presented to the data client
+    		in the user interface for reference.
+
+    \subsection{Conceptual Issues}
+    	In this section, issues with the concept of the survey tool are discussed.
+    	These issues may not necessarily be critical to the operation of the tool,
+    	but provide indications for future improvements.
+
+    	\subsubsection{Template Management}
+    		The template management feature is very powerful, but unlikely to
+    		by used to it's fully capacity at the moment, since it only
+    		shows it's true potential in larger teams. During the initial
+    		pahse of concept drafting, the GDPR was not taken into account
+    		and there were plans for external user accounts. Without
+    		external user accounts, only a small team of people will
+    		use the survey tool and it is unlikely that much survey content
+    		will be re-used. Developing and implementing the template
+    		management was a time-consuming endeavour. Development
+    		time could have been saved by implementing a less sophisticated
+    		version of template management, involving import and export
+    		capabilities and sharing survey content as files.
+
+	   	\subsubsection{xAPI Statement Design}
+	   		In some places, the format of xAPI statements emitted by
+	   		the survey tool is not completely normalized. This defeats
+	   		the purpose of using the JSON format in the first place,
+	   		as some fields have to be parsed a second time to extract all
+	   		data. The first case of this is the \inline{platform} string,
+	   		which contains the name of the survey tool, as well as the
+	   		LMS, which launched the survey tool. It would be more appropriate
+	   		to include information about the LTI launch in the
+	   		\inline{extensions} sections of the statement. For this,
+	   		an extension for representing LTI launch information
+	   		has to be drafted and specified.
+	   		The second case is the activity ID used for representing
+	   		survey items, which contains the owning data client's
+	   		email address. This case is not as problematic, as the
+	   		email address is only included to distinguish survey
+	   		content owned by different data clients and not for
+	   		reconstructing the data client from the ID.
+
+		\subsubsection{OAuth \& The LTI Launch Protocol}
+			It was not required to implement OAuth for securing
+			access to the survey tool's LTI endpoint.
+			This leaves the survey tool vulnerable to malicious
+			launches by third parties. The combination of
+			LTI endpoint and launch key used to launch the embedded
+			user interface may be intercepted by using common
+			network analysis tools included in every modern
+			web browser. This data could then be used to construct
+			a malicious launch request, allowing the attacker
+			to identify as a different or non-existent user.
+			The solution to this issue is to implement OAuth
+			as per the LTI specification.
+
+
+    \subsection{Implementational Issues}
+    	This section discusses cases, where the chosen implementation
+    	of a certain feature is not optimal and may be improved in the
+    	future.
+
+    	\subsubsection{ORM Inheritance Mapping}
+    		For mapping the survey tools class hierachies to the database,
+    		the joined table inheritance approach described in section
+    		\ref{section:implementation:inheritance-mapping} was used.
+    		The reason given for this choice is storage optimisation.
+    		Storage however can easily be extended if required.
+    		Access times can not as easily be improved by upgrading the
+    		underlying hardware. The joins produced by the joined table
+    		inheritance approach usually use at least 3 tables in the
+    		case of the survey tool. This can not be optimized further
+    		with the current class hierarchies. Also, foreign key
+    		constraints put in place by this approach require
+    		careful configuration of delete and update cascades,
+    		as modifications to one object instance might affect
+    		all tables along the object's inheritance chain.
+    		Single table inheritance, despite it's lacking aesthetics,
+    		is the more optimal approach for mapping class hierarchies,
+    		if access times a prioritized over used storage space.
+
+    	\subsection{Data Model}
+    		The current data model used in the backend service does
+    		not separate administrative data from survey content
+    		in the \inline{Questionnaire}, \inline{Dimension} and
+    		\inline{Question} classes. This makes it hard to separate
+    		data which should be vivisble to non-owners from
+    		sensitive data, which should only be visible to owners
+    		of a survey item. Although this separation is already
+    		enforced in the database as described in section \ref{section:implementation:template-triad},
+    		it is not consistently enforced thoughout the backend service's
+    		code. Separating survey content from administrative
+    		data consitently throughout the codebase would
+    		allow for better readability and by extension
+    		maintainability of the project.
+
+        \subsection{Duplication of Functionality: Redis \& Memcached}
+        	As described in section \ref{section:implementation:architecture},
+        	Two different key-value stores, Redis and Memcached are used.
+        	This is a leftover from prototyping. The backend service
+        	uses Memcached since the previous version of the survey tool.
+        	With the introduction of the xapi-publisher service and
+        	the Celery library, a message broker had to be included
+        	to distribute tasks to worker threads. Since Memcached
+        	can not be used for this purpose, Redis was included.
+        	It is possible to completely replace the Memcached instance
+        	by refactring the backend service to use Redis instead.
+        	This would result in less external dependencies and
+     		is generally favourable. 

@@ -7,19 +7,21 @@ had to be refactored were identified.
 
 \subsection{Use Cases}
 
-    \subsubsection{Accessing Students' Self-Regulated Learning Behaviour}
+    \subsubsection{Accessing Students' Self-Regulated Learning Behavior}
     In the context of TLA, the survey tool will be used to access students' self-regulated
     learning behaviour. Several psychometrical instruments exist for this, but
     for the purpose of this thesis only instruments based on or resembling
     the motivated strategies for learning questionnaire (MSLQ) were considered.
     One such instrument described in the 1994 paper 
-    ``Lernstrategien im Studium : Ergebnisse zur Faktorenstruktur und Reliabilitat eines neuen Fragebogens'' \cite{lernstrategien-wild-schiefele}
-    in particular was used as a guide to define new requirements for the platform.
+    ``Lernstrategien im Studium: Ergebnisse zur Faktorenstruktur und Reliabilit\"at eines neuen Fragebogens''
+    (Learning Strategies in Studies: Findings on the Factor Structure and Reliability of a new Questionnaire)
+     \cite{lernstrategien-wild-schiefele}
+    was particularly used as a guide to define new requirements for the platform.
      
      \subsubsection{Embedding in Moodle}
      \label{use-case:embedding}
      Moodle is an LMS used at Goethe University. The platform supports embedding of external
-     tools inside of a course context. Because previous and simultaneous efforts by Prof. Drachsler's
+     tools inside a course context. Because previous and simultaneous efforts by Prof. Drachsler's
      work group and collaborators already target Moodle, the new survey tool should also integrate
      with it. Surveys are still created using the survey tool's own user interface.
      Once a survey is created, it may be embedded into Moodle's course context via the LTI
@@ -32,7 +34,7 @@ had to be refactored were identified.
      This use case was carried over from the previous version.
 
      \subsubsection{Data Provider as Part of the TLA Ecosystem}
-     As metnioned before, the survey tool will contribute to the TLA ecosystem
+     As mentioned above, the survey tool will contribute to the TLA ecosystem
      by providing data to TLA's facts engine, using xAPI to communicate
      information about responses and events on the platform.
 
@@ -42,11 +44,11 @@ The previous version of the survey tool uses a self-authored database abstractio
 the object-document-mapper (ODM). This library is capable of persisting python objects
 and relationships between them. It does this by serializing objects to JSON and storing them
 using MongoDB. Runtime interactions with these objects are intercepted and converted into 
-database queries using the descriptor pattern (https://docs.python.org/3.7/howto/descriptor.html).
+database queries using the descriptor pattern \cite{python-descriptors}.
 This approach worked well for the limited use case, but it proved difficult to implement
 a transaction model that follows ACID properties.
 To achieve transaction safety without compromising API transparency, an existing
-object-relational-mapper (ORM) was chosen to replace the ODM. Key factors for the choice
+object-relational mapper (ORM) was chosen to replace the ODM. The key factors for the choice
 of ORM were:
 
 \begin{description}
@@ -59,18 +61,18 @@ of ORM were:
     \item[Support for JSON or hash map columns.] JSON columns provide a convenient way to store multiple 
     translations of a text column, without producing additional joins between the main table and
     supplemental translation tables. Storing multiple representations of a string
-    inside a relational database usually involves a 1 to n relationship between
-    the internationalised entity and it's translations. With the use of JSON columns,
+    inside a relational database usually involves a 1-to-n relationship between
+    the internationalized entity and its translations. With the use of JSON columns,
     multiple translations of a string can be stored as a dictionary inside a single
     column of the entity itself.
 \end{description}
 
-In table \ref{table:orm-feature-comparison} a comparison between the some of the most
+In Table \ref{table:orm-feature-comparison} a comparison between the some of the most
 popular ORM libraries available for Python 3 is presented. 
 Because of the project age, previous experience with the library and it's reliability 
 in production environments and the large feature set, SQLAlchemy was chosen to replace the ODM.
 
-\begin{figure}
+\begin{table}
  \centering
  \begin{tabularx}{\textwidth}{|l|X|X|X|X|}
      \hline
@@ -88,7 +90,7 @@ in production environments and the large feature set, SQLAlchemy was chosen to r
  \end{tabularx}
  \caption{Comparison of python ORM libraries}
  \label{table:orm-feature-comparison}
-\end{figure} 
+\end{table} 
 
 \subsection{Survey Content}
  To allow other surveys apart from the EFLA survey to work well with the platform, 
@@ -96,20 +98,20 @@ in production environments and the large feature set, SQLAlchemy was chosen to r
 
  \begin{description}
      \item[Response ranges should be adjustable.] Responses will still be on
-     a discrete scale with a step size of 1. Start and end of the scale should
+     a discrete scale with a step size of 1. The start and end of the scale should
      be adjustable.
      \item[Labels for the response ranges should be adjustable.] The EFLA survey
      uses the phrases ``Strongly disagree'' and ``Strongly agree'' to describe
-     the lower and upper ends of the response scale respectively. Other surveys
-     may use different descriptions, hence these descriptions should be adjustable.
+     the lower and upper ends of the response scale respectively. As other surveys
+     may use different descriptions, these descriptions should therefore be adjustable.
      \item[Question order should be configurable and optionally randomizable.]
  \end{description}
 
 \subsection{Template Management}
 The set of questionnaires which are of interest is changing over time.
 Initially, the MSLQ was considered to be the main questionnaire of interest
-for accessing self regulated learning behaviour. Because of the questionnaire's
-size, alternatives were researched by Prof. H. Drachsler and associates.
+for accessing self-regulated learning behavior. Because of the questionnaire's
+size, alternatives were researched by Prof. H. Drachsler and his associates.
 As new research is published and questionnaires become better statistically validated, the number of survey
  items needed to access a certain research question may decrease.
  For this reason, more current questionnaires may be preferred over
@@ -123,10 +125,10 @@ As new research is published and questionnaires become better statistically vali
  \begin{description}
      \item[Templates should be user-contributed.] Data clients with special
      privileges, called contributors, should be able to publish new templates
-     using just the user interface.
+     using only the user interface.
      \item[Individual survey items may be templates.] To create slightly modified
      versions of a questionnaire, it is useful to re-use existing survey items and not
-     just entire questionnaires.
+     only entire questionnaires.
      \item[Templates should be modifiable after creation.] Otherwise, editing
      errors would cause the template to become unusable and the entire template
      has to be created again.
@@ -150,7 +152,7 @@ As new research is published and questionnaires become better statistically vali
      of TLA to change in the future. It also decouples the survey tool from TLA 
      and allows interoperability with other LRSs.
      \item[xAPI statements must not be lost due to failure.] When publishing data
-     to an external storage, data integrity is no longer just determined by
+     to an external storage, data integrity is no longer only determined by
      database integrity. Appropriate measures must be taken to ensure 
      re-transmission in case of network failure. If transmission is not possible
      due to misconfiguration, an offline fallback method has to be provided.
@@ -166,20 +168,20 @@ As new research is published and questionnaires become better statistically vali
      by the Moodle LMS. The survey tool has to recognize LTI launch requests
      and respond with an embeddable version of the survey.
      \item[Data subjects should not have to authenticate.] When using the survey tool
-     from within Moodle, data subjects have already authorized with CAS in order
+     from within Moodle, data subjects have already authenticated with CAS in order
      to log in to the LMS. Requiring another form of user authentication after
-     this point would break seamless user experience.
+     this point would break the seamless user experience.
  \end{description}
 
  LTI uses OAuth 1 to sign requests. This provides a way for the tool provider
  to verify the identity of the LMS and the authenticity of the LTI request.
- It was explicitely not required to implement OAuth as part of this work.
+ The requirement to implement OAuth as part of this work was explicitly not required.
 
 \subsection{Privacy Considerations}
- Since May 25th 2018, the general data protection regulation applies to members of the EU \cite{gdpr-info}.
- The author is not in any way qualified to provide legal interpretation on the regulation.
- However, in consultation with Prof. H. Drachsler the following requirements
- were identified to conform with the regulation:
+ Since May 25th 2018, the General Data Protection Regulation has applied to EU member states \cite{gdpr-info}.
+ The author is not in any way qualified to provide a legal interpretation of the regulation.
+ However, in consultation with Prof. H. Drachsler, the following requirements
+ were identified to conform to the regulation:
 
  \begin{description}
      \item[Data deletion for data subjects.] Some personal data has to be stored

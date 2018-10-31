@@ -2,37 +2,37 @@
 \input{sections/terminology.tex}
 
 \subsection{The TLA Ecosystem}
-    Prof. H. Drachsler's work groups' current efforts are targeted towards the implementation
+    The current efforts of Prof. H. Drachsler's work group are targeted towards the implementation
     of a trusted learning analytics (TLA) infrastructure. This infrastructure will
-    provide big data storage and analysis capabilities while complying with the european general
-    data protection regulation (GDPR). A central part of this infrastructure are data
-    providers. These data providers are tools which collect data and publish it to
-    the TLA facts store, using the xAPI statement format as a common data representation.
-    The aim is to not only create the infrastructure to collect and analyse data,
-    but also to build and ecosystem of external tools and data providers
-    which interface with TLAs core components.
+    provide big data storage and analysis capabilities while complying with the European General
+    Data Protection Regulation (GDPR). Data providers present a central part of this infrastructure.
+    These data providers are tools used for collecting data and publishing it to
+    the TLA facts store, using the xAPI statement format as common data representation (CDR).
+    The aim here is not only to create the infrastructure for collecting and analyzing data,
+    but also to build an ecosystem of external tools and data providers
+    to interface with the TLA core's components.
 
 \subsection{Motivation}
-    Online survey tools are not a new invention by any stretch of the imagination.
+    By no stretch of the imagination are online survey tools a new invention.
     An online search yields dozens of already existing survey platforms, both
     commercial and free to use. Some of the biggest competitors in this business
-    are compared in table \ref{table:competitors}. For most use cases, one
+    are compared in Table \ref{table:competitors}. For most use cases, one
     of the existing solutions will be sufficient. The survey tool described here
-    aims at solving a unique challenge not solved by any competitor the author
+    aims at solving a unique challenge not solved by any competitor that the author
     is aware of. This challenge is integration with Moodle and the TLA
     infrastructure for use at the Goethe University in Frankfurt.
-    Features needed for this integration are single sign on, i.e.
+    Features needed for this integration are single sign-on, i.e.
     automated authentication of survey participants between Moodle and
     the survey tool, support for embedding via the LTI protocol, 
     as well as support for xAPI as a data exchange protocol.
     These requirements are discussed in greater detail in the Section
-    ``Requirements Analysis''. While most survey providers, provide single
-    sign on features, most only provide these capabilities to enterprise
-    customers. Also, only one of the competitors looked at in this thesis
+    ``Requirements Analysis''. While most survey providers provide single
+    sign-on features, these capabilities are generally only provided to enterprise
+    customers. Furthermore, only one of the competitors examined in this thesis
     supports CAS as a mechanism for this. None of the competitors
-    supports data export as xAPI statements out of the box and require either
+    support data export as xAPI statements out of the box and require either
     manual programming for every survey or data conversion after export. 
-    Out of the listed competitors, only one supports the LTI protocol for
+    Of the listed competitors, only one supports the LTI protocol for
     embedding the survey into Moodle and the only documentation of this 
     feature is an online video \cite{qualtrics-lti-video}. For these
     reasons, an alternative survey tool was developed.
@@ -85,7 +85,7 @@
 
 
 \subsection{Previous Work}
-    As part of the computational humanities seminar, which was held by \profhd in winter 2017/18, Hannes Leutloff
+    As part of the computational humanities seminar, conducted by \profhd in the 2017/18 winter semester, Hannes Leutloff
     and I were tasked to digitize the evaluation framework for learning analytics (EFLA) \cite{efla} and to
     develop an online platform where the survey could be taken.
 
@@ -98,7 +98,7 @@
 
    The result is an online survey platform, where surveys similar to the EFLA can be created
    and hosted. While it is possible to create arbitrary survey items, some restrictions
-   specific to the EFLA use-case apply (for a full list of features see table \ref{table:v1-features}).
+   specific to the EFLA use-case apply (for a full list of features see Table \ref{table:v1-features}).
    The original version of the survey tool is written in Python 3 and JavaScript for the server
    and user interface respectively. To be able to re-use code, the choice of language did not
    change with the new version.
@@ -116,7 +116,7 @@
             Internationalisation & Survey items may have multiple translations.\\
             User accounts & Users may sign up and host surveys.\\
             Template surveys & Choose from a fixed set of template surveys.\\
-            Visualisation & View survey results as a box plot.\\
+            Visualization & View survey results as a box plot.\\
             \hline
        \end{tabularx}
        \caption{Features of the previous version of the survey tool}
@@ -142,33 +142,33 @@
     The data model for the previous version is closely coupled to the specific needs of the
     EFLA survey, where a single survey consists of two questionnaires, targeting
     learners and teachers respectively.
-    Each questionnaire controlls DataSubjects' rights to submit by it's own set of access 
-    control modules, so that audience groups can be discriminated.
-    Each questionnaire contains one or more question groups, which contains of
+    Each questionnaire controls the submission right of data subjects by its own set of access 
+    control modules, so that audience groups can be differentiated.
+    Each questionnaire contains one or more question groups, which consists of
     one or more questions.
 
     \subsubsection{Architecture}
         The architecture for the previous version follows a simple client-server paradigm, where
-        a web browser takes the role of the client. The server software consists of an
+        a web browser assumes the role of the client. The server software consists of an
         application server, responding to API requests, a database and an in-memory
         key-value store for storing session data. There are two different user interfaces,
         one for data clients and one for data subjects. The data subjects' user interface
         is the page, where the survey is filled out and submitted. This page is rendered
         on the server using a templating engine and sent to the browser as a static HTML document.
         The user interface for data clients presents the user with an editor, where survey content
-        can be created and modified. This user interface is realised as a one-page
-        javascript application and was developed by Hannes Leutloff. Deployment is handled through
+        can be created and modified. This user interface is realized as a one-page
+        JavaScript application and was developed by Hannes Leutloff. Deployment is handled through
         Docker, with the help of the docker-compose tool.
 
 \subsection{Goal}
     The goal of this thesis is to extend the functionality of the already existing
     survey tool and to contribute to the TLA ecosystem by integrating the
     survey tool as a data provider. In this thesis, the overall structure of the 
-    survey platform and the server-side software stack, which was designed and developed 
-    by Noah Hummel is discussed. Implementational details are discussed only 
+    survey platform and the server-side software stack, designed and developed 
+    by Noah Hummel, is discussed. Implementational details are discussed only 
     if they are central to the workings of the software, or solve a particular 
-    conceptual challenge. The user interface was designed and mainly developed by 
-    Hannes Leutloff, and is therefore not discussed here.
+    conceptual challenge. As the user interface was designed and mainly developed by 
+    Hannes Leutloff, it is therefore not discussed here.
 
 \subsection{Additional Contents}
 \subsubsection{Source Code}
@@ -187,10 +187,10 @@
 \subsubsection{Documentation}
     The source code itself is documented using docstrings and comments.
     The project's \inline{README} file is the central point of access
-    for information about deployment, dependencies and development
+    for information on deployment, dependencies and development
     setup.
 
 \subsubsection{API Reference}
     The API reference for the \inline{backend} service can be accessed
-    at \url{http://bit.ly/xapi-probe-api-v6}. This version exists only
-    for reference and will not be updated.
+    at \url{http://bit.ly/xapi-probe-api-v6}. This version exists
+    for reference only and will not be updated.

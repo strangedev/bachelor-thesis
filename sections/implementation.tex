@@ -51,6 +51,7 @@
         parameterized for each LTI launch before serving it to the data client.
 
     \subsubsection{The xAPI-Publisher Service}
+    \label{implementation:architecture:xapi-publisher}
         The xapi-publisher service closely mimics the design of the
         backend service. In addition to Flask and uWSGI,
         it also runs several worker threads, which are responsible for the
@@ -159,12 +160,6 @@
             \caption{Database schema for a single question including foreign key constraints}
             \label{fig:schema-shadows}
         \end{figure}
-        \begin{figure}
-            \centering
-            \includegraphics[width=.9\textwidth]{questionnaire-dia}
-            \caption{The template triad, exemplarily depicted by the questionnaire data model}
-            \label{fig:questionnaire-dia}
-        \end{figure}
 
         To allow user-contributed templates which may also be modified after
         creation, the same data structures are used for templates as for
@@ -202,9 +197,17 @@
         stored in the super-class can be categorized as \textit{administrative data}.
         The super-class also acts as an interface for the concrete and shadow classes,
         specifying all accessors that should be available for its subclasses.
-        The shadow classes act as proxies, which use Pythons \inline{@property}
-        decorator to provide transparent read access to the referenced concrete's
-        attributes.
+        The shadow classes act as proxies providing transparent read access to the
+        referenced concrete's attributes.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=.9\textwidth]{questionnaire-dia}
+            \caption{The template triad, exemplarily depicted by the questionnaire data model}
+            \label{fig:questionnaire-dia}
+        \end{figure}
+
+        \pagebreak
 
         \begin{wrapfigure}{o}{.5\textwidth}
             \centering
@@ -213,20 +216,8 @@
             \label{fig:shadow-concept}
         \end{wrapfigure}
 
-        \begin{figure}[H]
-            \begin{lstlisting}[language=Python,frame=lines,backgroundcolor=\color{background},firstnumber=285]
-@property
-def reference_id(self) -> str:
-return self._referenced_object.reference_id
-
-@property
-def name(self) -> str:
-return self._referenced_object.name
-            \end{lstlisting}
-            \caption{Example of transparent proxying of concrete attributes in shadow classes}
-        \end{figure}
-
 \subsection{Template Management}
+\label{implementation:template-management}
 
     \subsubsection{Creation of Shadow Instances}
         Creating a shadow instance from a concrete instance not having
@@ -391,53 +382,6 @@ return self._referenced_object.name
     If successful, the associated \inline{Party} object is loaded and
     injected into the request context.    
 
-    \subsubsection{Access Control}
-        Access to API endpoints and actions is handled by two separate mechanisms.
-        The first mechanism uses Python function decorators to
-        block or grant access to an entire endpoint by checking the
-        current user's role. The second method involves checking the
-        ownership status of the accessed resource.
-        Different convenience methods exist for both mechanisms. These methods are listed in Table 
-        \ref{table:acl-convenience}
-
-        \begin{table}
-            \begin{tabularx}{\textwidth}{|l|l|X|}
-                \hline
-                Method & Arguments & Description \\
-                \hline \hline
-                \inline{@needs_role} & \inline{[Either Role [Role]]} & 
-                Grants access to the wrapped endpoint, if the user holds all roles in the given 
-                list. List items may be tuples of roles. In this case, only one of the 
-                roles contained in the tuple is sufficient. The expression 
-                \inline{[User, (Contributor, Admin)]} would match any user, who
-                has the \inline{User} role as well as either the \inline{Contributor} or
-                the \inline{Admin} role.\\
-                \inline{@needs_minimum_role} & \inline{Role} &
-                Grants access to the wrapped endpoint, if the role's ID value is
-                less than or equal to the ID of the given role. Roles
-                can be sorted by their ID, with \inline{Root} having the smallest and
-                \inline{Unprivileged} the largest ID. This method is useful for
-                restricting access to an endpoint to all users with a
-                certain level of privilege while also allowing all users
-                with a higher level of privilege. \\
-                \hline
-                \inline{SurveyBase.accessible_by()} & \inline{Party -> bool} & 
-                Checks whether a \inline{SurveyBase} may be read by the given party.
-                This methods defaults to \inline{True} for \inline{Admin} and above.
-                Read access is also granted, if the \inline{SurveyBase} is a template.
-                Otherwise, this method only returns \inline{True}, if the \inline{Party}
-                owns the \inline{SurveyBase}.\\
-                \inline{SurveyBase.modifiable_by()} & \inline{Party -> bool} & 
-                Checks whether a \inline{SurveyBase} may be modified by the given party.
-                This methods defaults to \inline{True} for \inline{Admin} and above.
-                Otherwise, this method only returns \inline{True}, if the \inline{Party}
-                owns the \inline{SurveyBase}.\\
-                \hline
-            \end{tabularx}
-            \caption{Convenience methods for enforcing access control restrictions}
-            \label{table:acl-convenience}
-        \end{table}
-
 \subsection{Authentication}
     \subsubsection{Data Client Authentication}
         Authentication for data clients can be performed by providing
@@ -479,15 +423,18 @@ return self._referenced_object.name
         the token will be rejected and the session will be removed
         from the cache.
 
-\subsection{Support for xAPI}
-
-        \begin{wrapfigure}{o}{.5\textwidth}
+        \begin{wrapfigure}[20]{o}{.5\textwidth}
             \centering
             \includegraphics[width=.48\textwidth]{synchronous-xapi}
             \caption{Synchronous (blocking) transmission of xAPI statements}
             \label{fig:synchronous-xapi}
         \end{wrapfigure}
-        
+
+\pagebreak
+
+\subsection{Support for xAPI}
+\label{implementation:xapi}
+     
     \subsubsection{xAPI in the Backend Service}
         xAPI statements are created in the backend service using an
         object-oriented API. Statements are queued locally using
@@ -543,7 +490,7 @@ return self._referenced_object.name
 
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth]{lti-launch}
+        \includegraphics[width=.85\textwidth]{lti-launch}
         \caption{Sequence diagram depicting the LTI launch}
         \label{fig:lti-launch}
     \end{figure}

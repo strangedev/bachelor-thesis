@@ -1,88 +1,4 @@
 \section{Introduction}
-\input{sections/terminology.tex}
-
-\subsection{The TLA Ecosystem}
-    The current efforts of Prof. H. Drachsler's work group are targeted towards the implementation
-    of a trusted learning analytics (TLA) infrastructure. This infrastructure will
-    provide big data storage and analysis capabilities while complying with the European General
-    Data Protection Regulation (GDPR). Data providers present a central part of this infrastructure.
-    These data providers are tools used for collecting data and publishing it to
-    the TLA facts store, using the xAPI statement format as common data representation (CDR).
-    The aim here is not only to create the infrastructure for collecting and analyzing data,
-    but also to build an ecosystem of external tools and data providers
-    to interface with the TLA core's components.
-
-\subsection{Motivation}
-    By no stretch of the imagination are online survey tools a new invention.
-    An online search yields dozens of already existing survey platforms, both
-    commercial and free to use. Some of the biggest competitors in this business
-    are compared in Table \ref{table:competitors}. For most use cases, one
-    of the existing solutions will be sufficient. The survey tool described here
-    aims at solving a unique challenge not solved by any competitor that the author
-    is aware of. This challenge is integration with Moodle and the TLA
-    infrastructure for use at the Goethe University in Frankfurt.
-    Features needed for this integration are single sign-on, i.e.
-    automated authentication of survey participants between Moodle and
-    the survey tool, support for embedding via the LTI protocol, 
-    as well as support for xAPI as a data exchange protocol.
-    These requirements are discussed in greater detail in the Section
-    ``Requirements Analysis''. While most survey providers provide single
-    sign-on features, these capabilities are generally only provided to enterprise
-    customers. Furthermore, only one of the competitors examined in this thesis
-    supports CAS as a mechanism for this. None of the competitors
-    support data export as xAPI statements out of the box and require either
-    manual programming for every survey or data conversion after export. 
-    Of the listed competitors, only one supports the LTI protocol for
-    embedding the survey into Moodle and the only documentation of this 
-    feature is an online video \cite{qualtrics-lti-video}. For these
-    reasons, an alternative survey tool was developed.
-
-    %\begin{landscape}
-    {\renewcommand{\arraystretch}{1.5}
-        \begin{table}
-            \begin{tabularx}{1\textwidth}{|l|X|X|X|}
-                \hline
-                \diagbox{Feature}{Provider} & Google Forms & SurveyMonkey & QuestionPro \\
-                \hline 
-                SSO & For managed accounts in G-Suite via SAML and LDAP \cite{googleforms-sso}
-                    & Supported, but further information is only provided to potential customers. \cite{surveymonkey-sso}
-                    & Through SAML and HMAC-SHA1 \cite{questionpro-sso}
-                    \\
-                xAPI & Not supported, but has limited support for programmable event handlers. \cite{googleforms-webhooks}
-                     & Not supported, but supports polling of survey results through an API. \cite{surveymonkey-api}
-                     & Not supported, but has support for web hooks. \cite{questionpro-webhooks}
-                     \\
-                LTI & Unsupported 
-                    & Unsupported 
-                    & Unsupported
-                    \\
-                \hline
-            \end{tabularx}
-            \vskip 1em
-            \begin{tabularx}{1\textwidth}{|l|X|X|}
-                \hline
-                \diagbox{Feature}{Provider} & qualtrics & survey gizmo \\
-                \hline 
-                SSO 
-                    & Through CAS, LDAP or SAML \cite{qualtrics-sso}
-                    & Through SAML \cite{surveygizmo-sso} \cite{surveygizmo-sso2}
-                    \\
-                xAPI 
-                     & Not supported, but supports polling of survey results through an API. \cite{qualtrics-api}
-                     & Not supported, but has limited support for web hooks. \cite{surveygizmo-webhooks}
-                     \\
-                LTI
-                    & Alledged experimental support, no official documentation exists. 
-                    & Unsupported
-                    \\
-                \hline
-            \end{tabularx}
-            \caption{Comparison of survey providers}
-            \label{table:competitors}
-        \end{table}
-    }
-    %\end{landscape}
-
 
 \subsection{Previous Work}
     As part of the computational humanities seminar, conducted by \profhd in the 2017/18 winter semester, Hannes Leutloff
@@ -160,37 +76,125 @@
         JavaScript application and was developed by Hannes Leutloff. Deployment is handled through
         Docker, with the help of the docker-compose tool.
 
-\subsection{Goal}
-    The goal of this thesis is to extend the functionality of the already existing
-    survey tool and to contribute to the TLA ecosystem by integrating the
-    survey tool as a data provider. In this thesis, the overall structure of the 
-    survey platform and the server-side software stack, designed and developed 
-    by Noah Hummel, is discussed. Implementational details are discussed only 
-    if they are central to the workings of the software, or solve a particular 
-    conceptual challenge. As the user interface was designed and mainly developed by 
-    Hannes Leutloff, it is therefore not discussed here.
+\input{sections/terminology.tex}
 
-\subsection{Additional Contents}
-\subsubsection{Source Code}
-    The source code for this project is maintained at GitHub and can be found at
-    \url{https://github.com/yeldiRium/st3k101}.
-    The version submitted as part of this thesis is version \inline{3.1.0-beta}, 
-    which can be accessed at \url{http://bit.ly/xapi-probe-3}. There, the
-    source code is available as a zip-compressed archive. The reader may
-    prove the authenticity of the release by calculating the archive's
-    SHA-1 hash sum. \\
-     
-    \inline{st3k101-3.1.0-beta.tar.gz: 1f1ce2727378713bedaaf801eaa5a4d2004f9d62}
-     
-    \inline{st3k101-3.1.0-beta.zip: 5a38cc5e485c249c9a215b0dd997fac77cc6c595}\\[1em]
+\subsection{The TLA Ecosystem}
+    The current efforts of Prof. H. Drachsler's work group are targeted towards the implementation
+    of a trusted learning analytics (TLA) infrastructure. This infrastructure will
+    provide big data storage and analysis capabilities while complying with the European General
+    Data Protection Regulation (GDPR). Data providers present a central part of this infrastructure.
+    These data providers are tools used for collecting data and publishing it to
+    the TLA facts store, using the xAPI statement format as common data representation (CDR).
+    The aim here is not only to create the infrastructure for collecting and analyzing data,
+    but also to build an ecosystem of external tools and data providers
+    to interface with the TLA core's components.
 
-\subsubsection{Documentation}
-    The source code itself is documented using docstrings and comments.
-    The project's \inline{README} file is the central point of access
-    for information on deployment, dependencies and development
-    setup.
+\subsection{Motivation}
+    By no stretch of the imagination are online survey tools a new invention.
+    An online search yields dozens of already existing survey platforms, both
+    commercial and free to use. Some of the biggest competitors in this business
+    are compared in Table \ref{table:competitors}. For most use cases, one
+    of the existing solutions will be sufficient. The survey tool described here
+    aims at solving a unique challenge not solved by any competitor that the author
+    is aware of. This challenge is integration with Moodle and the TLA
+    infrastructure for use at the Goethe University in Frankfurt.
+    Features needed for this integration are single sign-on, i.e.
+    automated authentication of survey participants between Moodle and
+    the survey tool, support for embedding via the LTI protocol, 
+    as well as support for xAPI as a data exchange protocol.
+    These requirements are discussed in greater detail in the Section
+    ``Requirements Analysis''. While most survey providers provide single
+    sign-on features, these capabilities are generally only provided to enterprise
+    customers. Furthermore, only one of the competitors examined in this thesis
+    supports CAS as a mechanism for this. None of the competitors
+    support data export as xAPI statements out of the box and require either
+    manual programming for every survey or data conversion after export. 
+    Of the listed competitors, only one supports the LTI protocol for
+    embedding the survey into Moodle and the only documentation of this 
+    feature is an online video \cite{qualtrics-lti-video}.
 
-\subsubsection{API Reference}
-    The API reference for the \inline{backend} service can be accessed
-    at \url{http://bit.ly/xapi-probe-api-v6}. This version exists
-    for reference only and will not be updated.
+    \subsubsection{Trusted Learning Analytics: Cloud Versus On-Premise}
+        Another motivation for developing a new software instead of customizing
+        one of the existing solutions is the amount of control this approach allows
+        over the collected data. The competitors provide cloud-based software-as-a-service
+        solutions, which do not allow for full control over the data collected on data subjects
+        and their usage of the site. This is a serious disadvantage for applications
+        in trusted learning analytics, as data clients cannot provide data subjects
+        with autonomy over their data. One of the great challenges in learning analytics
+        is fostering trust in the used data analysis methods and the ethical use
+        of collected data. Ethical boundaries differ from person to person,
+        and data subjects may not be comfortable with specific parts of their
+        personal data being collected and analyzed. For these reasons, providing 
+        transparency and allowing data subjects agency over the treatment of their personal data are
+        cornerstones of the trusted learning analytics approach.
+        With cloud-based providers, there are usually no guarantees about where
+        the data is being stored and how long it is being stored for.
+        Some providers, e.g. SoSci Survey, have already recogized this market niche 
+        and advertise server hosting in Germany and encrypted data backups \cite{soscisurvey}.
+        This does, however, not satisfy the requirements for transparency trusted
+        learning analytics strives to achieve, as the infrastructure remains a
+        black box. In addition, using on-premise software allows for greater agility,
+        should requirements on data storage and handling change in the future.
+
+
+    %\begin{landscape}
+    {\renewcommand{\arraystretch}{1.5}
+        \begin{table}
+            \begin{tabularx}{1\textwidth}{|l|X|X|X|}
+                \hline
+                \diagbox{Feature}{Provider} & Google Forms & SurveyMonkey & QuestionPro \\
+                \hline 
+                SSO & For managed accounts in G-Suite via SAML and LDAP \cite{googleforms-sso}
+                    & Supported, but further information is only provided to potential customers. \cite{surveymonkey-sso}
+                    & Through SAML and HMAC-SHA1 \cite{questionpro-sso}
+                    \\
+                xAPI & Not supported, but has limited support for programmable event handlers. \cite{googleforms-webhooks}
+                     & Not supported, but supports polling of survey results through an API. \cite{surveymonkey-api}
+                     & Not supported, but has support for web hooks. \cite{questionpro-webhooks}
+                     \\
+                LTI & Unsupported 
+                    & Unsupported 
+                    & Unsupported
+                    \\
+                \hline
+            \end{tabularx}
+            \vskip 1em
+            \begin{tabularx}{1\textwidth}{|l|X|X|}
+                \hline
+                \diagbox{Feature}{Provider} & qualtrics & survey gizmo \\
+                \hline 
+                SSO 
+                    & Through CAS, LDAP or SAML \cite{qualtrics-sso}
+                    & Through SAML \cite{surveygizmo-sso} \cite{surveygizmo-sso2}
+                    \\
+                xAPI 
+                     & Not supported, but supports polling of survey results through an API. \cite{qualtrics-api}
+                     & Not supported, but has limited support for web hooks. \cite{surveygizmo-webhooks}
+                     \\
+                LTI
+                    & Alledged experimental support, no official documentation exists. 
+                    & Unsupported
+                    \\
+                \hline
+            \end{tabularx}
+            \caption{Comparison of survey providers}
+            \label{table:competitors}
+        \end{table}
+    }
+    %\end{landscape}
+
+\subsection{Research question}
+    In the light of the need for an on-premise survey solution, which integrates with
+    existing and emerging educational and learning analytics technologies, this
+    thesis aims at answering the following research questions:
+
+    \begin{itemize}
+        \item[1)] How can the xAPI specification be applied to data collection in the context
+            of an online survey tool? More specifically, how may the data be represented using
+            the xAPI statement format and what technical difficulties arise when integrating the
+            specification?
+        \item[2)] Using the survey tool, how can data clients provide their survey items to others 
+            and how can existing surveys be re-used?
+        \item[3)] How can interoperability between existing educational technologies, more specifically
+            learning management systems like Moodle, and the survey tool be achieved?
+    \end{itemize}

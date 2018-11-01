@@ -31,12 +31,13 @@
     		navigation elements in English.
 
     	\subsubsection{Edge Cases of the Template Management}
-    		\begin{wrapfigure}{o}{0.5\textwidth}
+        \label{analysis:known-issues:template-management-edge-cases}
+    		\begin{figure}
     			\centering
-    			\includegraphics[width=0.49\textwidth]{template-edge-case}
+    			\includegraphics[width=.8\textwidth]{template-edge-case}
     			\caption{Using a shadow instance inside the source concrete breaks the delete action}
     			\label{fig:shadow-breaks-delete}
-    		\end{wrapfigure}
+    		\end{figure}
 
     		When a shadow instance (Shadow \#1 of B) is created as a child of a concrete instance (Concrete A), which also contains the referenced
     		concrete instance (Concrete B) for the newly created shadow (Shadow \#1 of B), the following case may occur: when a shadow (Shadow of A) is created
@@ -68,21 +69,8 @@
     	These issues may not necessarily be critical to the operation of the tool,
     	but provide indications for future improvements.
 
-    	\subsubsection{Template Management}
-    		The template management feature is very powerful, but unlikely to
-    		be used to its full capacity at the moment, since it only
-    		shows its true potential in larger teams. During the initial
-    		phase of concept drafting, the GDPR was not taken into account
-    		and there were plans for external user accounts. Without
-    		external user accounts, only a small team of people will
-    		use the survey tool, and it is unlikely that much survey content
-    		will be re-used. Developing and implementing the template
-    		management was a time-consuming endeavor. Development
-    		time could have been saved by implementing a less sophisticated
-    		version of the template management, involving import and export
-    		capabilities and sharing survey content as files.
-
 	   	\subsubsection{xAPI Statement Design}
+        \label{analysis:known-issues:xapi-not-normalized}
 	   		In some places, the format of xAPI statements emitted by
 	   		the survey tool is not completely normalized. This defeats
 	   		the purpose of using the JSON format in the first place,
@@ -140,7 +128,7 @@
     		is the more optimal approach for mapping class hierarchies,
     		if access times are prioritized over storage space used.
 
-    	\subsection{Data Model}
+    	\subsubsection{Data Model}
     		The current data model used in the backend service does
     		not separate administrative data from survey content
     		in the \inline{Questionnaire}, \inline{Dimension} and
@@ -155,7 +143,7 @@
     		allow for better readability and -- by extension --
     		maintainability of the project.
 
-        \subsection{Duplication of Functionality: Redis \& Memcached}
+        \subsubsection{Duplication of Functionality: Redis \& Memcached}
         	As described in Section \ref{section:implementation:architecture},
         	two different key-value stores, Redis and Memcached are used.
         	This is a leftover from prototyping. The backend service
@@ -168,3 +156,57 @@
         	by refactoring the backend service to use Redis instead.
         	This would result in less external dependencies and
      		is therefore favorable.
+
+    \subsection{Conclusion}
+
+    In conclusion, the research questions posed in the introduction of this
+    thesis were answered, but additional questions for further research arise
+    as well.
+
+    The xAPI statement format suits itself well for data collection
+    in the context of an online survey tool. As described in Section \ref{section:concept:xapi-statement-design},
+    designing xAPI statements around the survey tool's use cases was
+    straightforward. The level of detail provided by the format is
+    more than sufficient for the application at hand. Because of the
+    formats portability, special care needs to be taken when designing
+    representations of objects. Adopters of the specification should
+    be aware of the fact that a single identifier is often not sufficient
+    for recognizing objects across systems, as no system is aware of all objects.
+    The actor representations take this into account by combining a user identifier
+    with an identifier of the domain which recognizes the user. The xAPI object does not yet
+    provide a normalized representation for this. Adopters should also be aware
+    of the fact, that depending on the source of an xAPI statement, the same person
+    might be represented differently. To identify people in a reliable way,
+    a list of all known representations of a person has to be maintained.
+    How this can be achieved is a topic for future research.
+    
+    From a technical perspective, adoption of the xAPI specification is
+    not particularly challenging, as it relies on widely used technologies.
+    Special care needs to be taken with regards to transmission integrity,
+    adopters should be aware that re-transmission are required in case of
+    network failure. Aggregation of xAPI statements and asynchronous transmission
+    using a dedicated service, as described in Sections \ref{implementation:architecture:xapi-publisher}
+    and \ref{implementation:xapi}, has worked well for this.
+
+    Sharing of survey items between data clients can be achieved through
+    the template management system described in Sections \ref{concept:template-management},
+    \ref{section:implementation:template-triad} and \ref{implementation:template-management}.
+    While the chosen approach is superior to simple import and export capabilities
+    in the sense that it scales better and changes can be rolled out immediately 
+    by authors of templates, it also introduced additional challenges.
+    The biggest issue with he current system is that when a data client relies on a template,
+    they do not have any control over changes to the content. Content might change
+    at any time at the template authors discretion. This stifles trust in the reliability
+    of templates. A content sharing system should therefore always include some sort
+    of version control.
+
+    For interoperability between the survey tool and the Moodle LMS, satisfying
+    results have been achieved using the LTI launch protocol. The launch
+    mechanism provides sufficient information for targeting specific resources
+    the tool provider may provide to the LMS. Adopters of the specification
+    should be aware that implementational details vary between LMS vendors.
+    As discussed in Section \ref{section:concept:xapi-statement-design},
+    some of the data provided in LTI requests might not be useful for a
+    given application and vendor specific extensions may be in use.
+    For these reasons, LTI launch requests may have to be handled
+    differently by the tool provider depending on the launching LMS.

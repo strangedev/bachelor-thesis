@@ -94,6 +94,15 @@
     
     %%%% Some helpful stuffs %%%%
 
+    \newcommand{\namesigdate}[2][5cm]{%
+        \begin{minipage}{#1}
+            #2 \vspace{1.0cm}\hrule\smallskip
+            \small \textit{Signature}
+            \vspace{1.0cm}\hrule\smallskip
+            \small \textit{Date}
+        \end{minipage}
+    }
+
     %% \begin{onepage} -> Fit contents on one page
     \newcommand{\addstretch}[1]{\addtolength{#1}{\fill}}
     \newenvironment{onepage}
